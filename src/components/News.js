@@ -21,12 +21,12 @@ export class News extends Component {
         this.state = {
             articles: [],
             loading: false,
-            page: 1
+            page: +1
         }
     }
 
     async updateNews() {
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=b7a745a7b9e14ae780f7fb5e565fc776&page=${this.props.page}&pageSize=${this.props.pageSize}`;
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=b7a745a7b9e14ae780f7fb5e565fc776&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         this.setState({ loading: true });
         let data = await fetch(url);
         let parseData = await data.json()
