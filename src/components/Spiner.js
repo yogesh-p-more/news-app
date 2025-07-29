@@ -6,7 +6,7 @@ export class Spiner extends Component {
     return (
       <>
       <div className="text-center">
-        <img src={loading} alt="loder" />
+        <img className='my-3' src={loading} alt="loder" />
       </div>
       </>
     )
