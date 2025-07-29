@@ -1,31 +1,29 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export class NewsItem extends Component {
-    render() {
-        let { title, discription, imageUrl, newsUrl, author, date, source } = this.props;
-        return (
-            <>
-                <div className="h-100">
-                    <div className="card h-100">
-                        <img src={!imageUrl ? "https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1099495_800x450.jpg" : imageUrl} className="card-img-top" alt="..." />
+const NewsItem = (props) => {
+    let { title, discription, imageUrl, newsUrl, author, date, source } = props;
+    return (
+        <>
+            <div className="h-100">
+                <div className="card h-100">
+                    <img src={!imageUrl ? "https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1099495_800x450.jpg" : imageUrl} className="card-img-top" alt="..." />
 
-                        <div className='d-flex position-absolute top-0 end-0'>
-                            <span className=" badge rounded-pill bg-danger" >
+                    <div className='d-flex position-absolute top-0 end-0'>
+                        <span className=" badge rounded-pill bg-danger" >
                             {source}
                         </span>
-                        </div>
+                    </div>
 
-                        <div className="card-body">
-                            <h5 className="card-title">{title}</h5>
-                            <p className="card-text">{discription}</p>
-                            <p className="card-text"><small className="text-body-secondary">By <strong>{!author ? "Unknown" : author}</strong> on {new Date(date).toGMTString()}</small></p>
-                            <a href={newsUrl} rel="noreferrer" target='_blank' className="btn btn-sm btn-primary">Read More</a>
-                        </div>
+                    <div className="card-body">
+                        <h5 className="card-title">{title}</h5>
+                        <p className="card-text">{discription}</p>
+                        <p className="card-text"><small className="text-body-secondary">By <strong>{!author ? "Unknown" : author}</strong> on {new Date(date).toGMTString()}</small></p>
+                        <a href={newsUrl} rel="noreferrer" target='_blank' className="btn btn-sm btn-primary">Read More</a>
                     </div>
                 </div>
-            </>
-        )
-    }
+            </div>
+        </>
+    )
 }
 
 export default NewsItem
