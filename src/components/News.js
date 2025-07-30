@@ -10,41 +10,60 @@ const News = (props) => {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
-    // document.title = `${capitalizeFirstLetter(props.category)} - NewsMonkey`;
+    
 
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    const updateNews = async () => {
-        props.setProgress(10);
-        let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
-        setLoading(true);
-        let data = await fetch(url);
-        let parseData = await data.json()
-        setArticles(parseData.articles);
-        setTotalResults(parseData.totalResults);
+   const updateNews = async () => {
+    props.setProgress(10);
+    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
+    
+    setLoading(true);
+    let data = await fetch(url);
+    
+    if (!data.ok) {
+        console.error("Failed to fetch data:", data.status);
         setLoading(false);
-        props.setProgress(100);
-
+        return;
     }
+
+    let parseData = await data.json();
+    setArticles(parseData.articles || []);
+    setTotalResults(parseData.totalResults || 0);
+    setLoading(false);
+    props.setProgress(100);
+};
+
     const fetchMoreData = async () => {
-        setPage(page + 1);
-        let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
-        let data = await fetch(url);
-        let parseData = await data.json()
-        setArticles(parseData.articles);
-        setTotalResults(parseData.totalResults);
-        setLoading(false);
-    };
+        const nextPage = page + 1;
+        let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${nextPage}&pageSize=${props.pageSize}`;
+
+    let data = await fetch(url);
+    
+    if (!data.ok) {
+        console.error("API limit reached or error fetching data");
+        return;
+    }
+
+    let parseData = await data.json();
+    
+    setArticles(articles.concat(parseData.articles || []));
+    setTotalResults(parseData.totalResults || 0);
+    setPage(nextPage);
+};
+
 
     useEffect(() => {
+        document.title = `${capitalizeFirstLetter(props.category)} - NewsMonkey`;
         updateNews();
+        // eslint-disable-next-line
     }, [])
 
     return (
         <>
-            <h1 className='text-center'>News Monkey - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
+            <h1 className='text-center' style={{marginTop:"90px"}}>News Monkey - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
             {loading && <Spiner />}
             <InfiniteScroll
                 dataLength={articles.length}
